@@ -8,23 +8,32 @@ import java.util.ArrayList;
 import java.sql.Types;
 import java.sql.PreparedStatement;
 import java.sql.SQLIntegrityConstraintViolationException;
-
+/**
+ * QuickRead - Library Class
+ * Main class for connection to SQL database.
+ * @author SerialSystems
+ * 
+ */
 
 public class Library {
     
-    private ArrayList<Person> people;
-    private ArrayList<Book> allBooks;
-    private ArrayList<Loan> allLoans;
+    private ArrayList<Person> people; // every person in library system
+    private ArrayList<Book> allBooks; // every book in library system
+    private ArrayList<Loan> allLoans; // every loan in library system
     
-    public static final double dailyFine = .1; // ten cents a day
-    public static final int checkoutLimit = 30; // 30 day limit
+    public static final double dailyFine = .1; // ten cents a day fine for overdue books
+    public static final int checkoutLimit = 30; // 30 day limit for checking out book
     
+    // constructor creating new array lists for people, books, and loans
     private Library() {
         people = new ArrayList();
         allBooks = new ArrayList();
         allLoans = new ArrayList();
     }
 
+    /*
+     * Getters and Setters
+     */
     public ArrayList<Person> getPeople() {
         return people;
     }
@@ -49,10 +58,21 @@ public class Library {
         this.allLoans = allLoans;
     }
     
+    //////////////////////////////////////////////////////////
+    
+    /**
+     * add an already created book to array list
+     * @param book
+     */
     public void addBook(Book book) {
         allBooks.add(book);
     }
     
+    /**
+     * allows user to search the book array list 
+     * @return choice - users search results from ArrayList<Book> 
+     * @throws IOException
+     */
     public ArrayList<Book> searchBooks() throws IOException {
         String choice;
         String title = "", subject = "", author = "";
@@ -60,15 +80,30 @@ public class Library {
         return null;
     }
     
+    /**
+     * allows librarian to create book by providing title, author, and subject 
+     * and adds it to the array list
+     * @param title
+     * @param author
+     * @param subject
+     */
     public void addBook(String title, String author, String subject) {
         Book book = new Book(-1, title, author, subject, false);
         addBook(book);
     }
     
+    /**
+     * allows user to login using username and password
+     * @return user - Person info
+     */
     public Person login() {
         return null;
     }
     
+    /**
+     * connects to host for SQL 
+     * @return
+     */
     public Connection connect() {
         try {
             String host = "";

@@ -1,13 +1,19 @@
-
+/**
+ * QuickRead - Person Class
+ * Standard Person info used by student, admin, and librarian class
+ * @author SerialSystems
+ * 
+ */
 public abstract class Person {
 
-    protected int id;
-    protected String password;
-    protected String name;
-    protected String position;
+    protected int id; // custom id for every person in library system
+    protected String password; // custom password for every person in library system
+    protected String name; // custom name for every person in library system
+    protected String position; // specifies library position of student, admin librarian
     
-    static int currentId = 0;
+    static int currentId = 0; // id is incremented by one as each person is created
     
+    // constructor for person
     public Person(int id, String password, String name, String position) {
         currentId++;
         if(id == -1) {
@@ -21,11 +27,14 @@ public abstract class Person {
         position = this.position;
         
     }
-    
+    /**
+     * Print person info
+     */
     public void printInfo() {
         
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -57,7 +66,7 @@ public abstract class Person {
     public void setPosition(String position) {
         this.position = position;
     }
-    
+    ////////////////////////////////////////////////
     
     
 }

@@ -4,7 +4,12 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
+/**
+ * QuickRead - LoginPage Class
+ * Login window GUI
+ * @author LoginPage
+ * 
+ */
 public class LoginPage extends JFrame {
 
     private JPanel contentPane;

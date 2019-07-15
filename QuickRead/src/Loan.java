@@ -1,13 +1,19 @@
 import java.util.Date;
-
+/**
+ * QuickRead - Loan Class
+ * Handles every loan for library users by book
+ * @author SerialSystems
+ * 
+ */
 public class Loan {
 
-    private Student student;
-    private Book book;
-    private Date checkedOut;
-    private Date checkedIn;
-    private boolean fines;
+    private Student student; // student object
+    private Book book; // book object
+    private Date checkedOut; // date book is checked out
+    private Date checkedIn; // date book is checked in
+    private boolean fines; // true if student fines is greater than 0
     
+    // Constructor
     public Loan(Student student, Book book, Date checkedOut, Date checkedIn,
             boolean fines) {
         student = this.student;
@@ -18,6 +24,7 @@ public class Loan {
           
     }
 
+    // Getters and Setters
     public Student getStudent() {
         return student;
     }
@@ -57,7 +64,12 @@ public class Loan {
     public void setFines(boolean fines) {
         this.fines = fines;
     }
+    //////////////////////////////////////////////////
     
+    /**
+     * Calculates fines by each book and adds it to students total fines
+     * @return totalFine - double  
+     */
     public double addFines() {
         double totalFine = 0;
         if (!fines) {
@@ -77,6 +89,9 @@ public class Loan {
         return totalFine;   
     }
     
+    /**
+     * Prompts user to pay fines and allows them to do so 
+     */
     public void payFine() {
         double totalFine = addFines();
         
@@ -87,6 +102,10 @@ public class Loan {
         }
     }
     
+    /**
+     * gives a book its new check out date 
+     * @param newCheckedOut
+     */
     public void renew(Date newCheckedOut) {
         checkedOut = newCheckedOut;
         
