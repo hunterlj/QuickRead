@@ -57,7 +57,7 @@ public class Loan {
         this.checkedIn = checkedIn;
     }
 
-    public boolean isFines() {
+    public boolean getFines() {
         return fines;
     }
 
