@@ -20,6 +20,7 @@ import java.awt.Font;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JLayeredPane;
+import javax.swing.ButtonGroup;
 /**
  * QuickRead - LoginPage Class
  * Login window GUI
@@ -45,6 +46,14 @@ public class SearchHomePage extends JFrame {
     private final JScrollPane scrollPane = new JScrollPane();
     private final JMenu mnSignIn = new JMenu("Sign In");
     private final JMenu mnCreateAccount = new JMenu("Create Account");
+    private final JMenuBar menuBar_1 = new JMenuBar();
+    private final JMenu mnSerial = new JMenu("Serial");
+    private final JMenu mnTitle = new JMenu("Title");
+    private final JMenu mnAuthor = new JMenu("Author");
+    private final JMenu mnSubject = new JMenu("Subject");
+    private final JMenu mnDescription = new JMenu("Description");
+    private final JMenu mnCopiesAvaliable = new JMenu("Copies Avaliable");
+    private final ButtonGroup buttonGroup = new ButtonGroup();
     
     /**
      * Launch the application.
@@ -66,6 +75,8 @@ public class SearchHomePage extends JFrame {
      * Create the frame.
      */
     public SearchHomePage() {
+        buttonGroup.add(rdbtnBookTitle);
+        buttonGroup.add(rdbtnSubject);
         textField.setColumns(10);
         lblQuickread.setFont(new Font("Tahoma", Font.BOLD, 20));
         lblQuickread.setHorizontalAlignment(SwingConstants.CENTER);
@@ -122,6 +133,7 @@ public class SearchHomePage extends JFrame {
                             .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 940, GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap(11, Short.MAX_VALUE))
         );
+        buttonGroup.add(rdbtnBookAuthor);
         gl_contentPane.setVerticalGroup(
             gl_contentPane.createParallelGroup(Alignment.LEADING)
                 .addGroup(gl_contentPane.createSequentialGroup()
@@ -150,6 +162,20 @@ public class SearchHomePage extends JFrame {
                     .addPreferredGap(ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                     .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 491, GroupLayout.PREFERRED_SIZE))
         );
+        
+        scrollPane.setColumnHeaderView(menuBar_1);
+        
+        menuBar_1.add(mnSerial);
+        
+        menuBar_1.add(mnTitle);
+        
+        menuBar_1.add(mnAuthor);
+        
+        menuBar_1.add(mnSubject);
+        
+        menuBar_1.add(mnDescription);
+        
+        menuBar_1.add(mnCopiesAvaliable);
         contentPane.setLayout(gl_contentPane);
     }
 }

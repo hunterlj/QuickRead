@@ -30,6 +30,7 @@ public class LoginPage {
     private JTextField txtPassword;
     private JRadioButton btnSignIn;
     private final ButtonGroup buttonGroup = new ButtonGroup();
+    private final ButtonGroup buttonGroup_1 = new ButtonGroup();
 
     /**
      * Launch the application.
@@ -88,12 +89,12 @@ public class LoginPage {
         txtPassword.setColumns(10);
         
         JRadioButton rdbtnStudent = new JRadioButton("Student");
-        buttonGroup.add(rdbtnStudent);
+        buttonGroup_1.add(rdbtnStudent);
         rdbtnStudent.setBounds(138, 181, 87, 45);
         frame.getContentPane().add(rdbtnStudent);
         
         JRadioButton rdbtnAdmin = new JRadioButton("Admin");
-        buttonGroup.add(rdbtnAdmin);
+        buttonGroup_1.add(rdbtnAdmin);
         rdbtnAdmin.setBounds(232, 182, 82, 42);
         frame.getContentPane().add(rdbtnAdmin);
         
@@ -120,6 +121,7 @@ public class LoginPage {
         frame.getContentPane().add(lblUser);
         
         JRadioButton rdbtnLibrarian = new JRadioButton("Librarian");
+        buttonGroup_1.add(rdbtnLibrarian);
         rdbtnLibrarian.setBounds(318, 189, 125, 29);
         frame.getContentPane().add(rdbtnLibrarian);
     }

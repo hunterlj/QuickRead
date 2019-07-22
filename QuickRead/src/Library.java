@@ -188,7 +188,7 @@ public class Library {
         
         try {
             String myDriver = "com.mysql.jdbc.Driver";
-            String myURL = "jdcb:mysql://localhost/librarydb";
+            String myURL = "jdcb:mysql://localhost/libraryDB";
             Class.forName(myDriver);
             Connection conn = DriverManager.getConnection(myURL, "libraryUser", "Password2525");
                String query = "SELECT * FROM books";
