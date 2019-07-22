@@ -10,6 +10,13 @@ public class Admin extends Person {
         super(id, password, name, position);
         
     }
+    
+    /**
+     * for approval of librarians request for new book in library
+     */
+    public void approveRequest() {
+        
+    }
 
     
 }

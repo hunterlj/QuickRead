@@ -150,9 +150,9 @@ public class Library {
      * @param author
      * @param subject
      */
-    public void addBook(String title, String author, String subject) {
+    public void addBook(String title, String author, String subject, String description) {
         // SQL STATEMENT: INSERT INTO BOOK (title, author, subject) VALUES (title, author, subject)
-        Book book = new Book(-1, title, author, subject, false);
+        Book book = new Book(-1, title, author, subject, false, description);
         addBook(book);
     }
     
@@ -174,18 +174,42 @@ public class Library {
      * connects to host for SQL 
      * @return
      */
-    public Connection connect() {
+    public static void main(String[] args) {
+//        try {
+//            String host = "jdbc:mysql://localhost:3306/LibraryDB?useSSL=false";
+//            String username = "LibraryUser";
+//            String password = "Password2525";
+//            Connection connection = DriverManager.getConnection(host,  username,  password);
+//            return connection;
+//        } catch (SQLException error) {
+//            System.out.println(error.getMessage());
+//            return null;
+//        }
+        
         try {
-            String host = "jdbc:mysql://localhost:3306/LibraryDB?useSSL=false";
-            String username = "LibraryUser";
-            String password = "Password2525";
-            Connection connection = DriverManager.getConnection(host,  username,  password);
-            return connection;
-        } catch (SQLException error) {
-            System.out.println(error.getMessage());
-            return null;
+            String myDriver = "com.mysql.jdbc.Driver";
+            String myURL = "jdcb:mysql://localhost/librarydb";
+            Class.forName(myDriver);
+            Connection conn = DriverManager.getConnection(myURL, "libraryUser", "Password2525");
+               String query = "SELECT * FROM books";
+               
+               Statement st = conn.createStatement();
+               ResultSet rs = st.executeQuery(query);
+               while (rs.next()) {
+                   int id = rs.getInt("id");
+                   String title = rs.getString("title");
+                   System.out.println(id + ", " + title);
+               } 
+               
+               st.close();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+
+        
     }
+
     
     
     
@@ -207,8 +231,9 @@ public class Library {
                 String title = set.getString("TITLE");
                 String author = set.getString("AUTHOR");
                 String subject = set.getString("SUBJECT");
+                String description = set.getString("DESCRIPTION");
                 boolean isCheckedIn = set.getBoolean("IS_CHECKEDIN");
-                Book book = new Book(serial, title, subject, author, isCheckedIn);
+                Book book = new Book(serial, title, subject, author, isCheckedIn, description);
                 addBook(book);
                 
                 if(topSerial < serial) {

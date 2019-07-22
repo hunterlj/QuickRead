@@ -13,11 +13,11 @@ public class Book {
     private String description; // description of the book
     private boolean isCheckedIn; // true if checked out, false otherwise
     
-    static int currentSerial = 0; // serial iterated by 1 for each new book
+    static int currentSerial = 1; // serial iterated by 1 for each new book
     
     // Constructor for book assigning info and setting status to checked in
     public Book(int serial, String title, String author, String subject, 
-            boolean checkedIn) {
+            boolean checkedIn, String description) {
         
         currentSerial++;
         
@@ -68,12 +68,21 @@ public class Book {
     public boolean getStatus() {
         return isCheckedIn;
     }   
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
     /////////////////////////////////////////////////////////
     
-    // Print book info seperated by a space;
+    // Print book info separated by a space;
     public void printInfo() {
         
-        System.out.println(serial + " " + title + " " + author + " " + subject);
+        System.out.println(serial + ", " + title + ", " + author + ", " + subject 
+                + ", " +  isCheckedIn + ": " + description);
         
     }
     
@@ -99,8 +108,12 @@ public class Book {
         setStatus(true);
     }
     
+    /**
+     * returns book in form of string
+     */
     public String toString() {
-        return title + " " + author;
+        return serial + ", " + title + ", " + author + ", " + subject 
+                + ", " +  isCheckedIn + ": " + description;
     }
     
 }
