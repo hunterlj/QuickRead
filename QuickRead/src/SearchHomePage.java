@@ -118,7 +118,7 @@ public class SearchHomePage extends JFrame {
                                 .addComponent(btnSignIn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnSignUp, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(gl_contentPane.createSequentialGroup()
-                            .addGap(15)
+                            .addGap(27)
                             .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 940, GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap(11, Short.MAX_VALUE))
         );
@@ -147,9 +147,8 @@ public class SearchHomePage extends JFrame {
                             .addGap(6)
                             .addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addComponent(lblQuickread, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
-                    .addGap(18)
-                    .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 491, GroupLayout.PREFERRED_SIZE)
-                    .addGap(28))
+                    .addPreferredGap(ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                    .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 491, GroupLayout.PREFERRED_SIZE))
         );
         contentPane.setLayout(gl_contentPane);
     }

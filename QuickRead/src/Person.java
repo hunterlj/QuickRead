@@ -5,13 +5,14 @@
  * 
  */
 public abstract class Person {
-
+    
     protected int id; // custom id for every person in library system
     protected String password; // custom password for every person in library system
     protected String name; // custom name for every person in library system
     protected String position; // specifies library position of student, admin librarian
+    protected String username;
     
-    static int currentId = 0; // id is incremented by one as each person is created
+    static int currentId = 1; // id is incremented by one as each person is created
     
     // constructor for person
     public Person(int id, String password, String name, String position) {
@@ -22,16 +23,21 @@ public abstract class Person {
             id = this.id;
         }
         
-        password = this.password;
-        name = this.name;
-        position = this.position;
+        setId(id);
+        setPassword(password);
+        setName(name);
+        setPosition(position);
         
+    }
+    
+    public String toString() {
+        return id + " " + name;
     }
     /**
      * Print person info
      */
     public void printInfo() {
-        
+        System.out.println(id + " " +  name + " " + position);
     }
 
     // Getters and Setters

@@ -11,17 +11,28 @@ public class Loan {
     private Book book; // book object
     private Date checkedOut; // date book is checked out
     private Date checkedIn; // date book is checked in
-    private boolean fines; // true if student fines is greater than 0
+    private boolean getFined = false;
+    private int fines; 
     
     // Constructor
-    public Loan(Student student, Book book, Date checkedOut, Date checkedIn,
-            boolean fines) {
-        student = this.student;
-        book = this.book;
-        checkedOut = this.checkedOut;
-        checkedIn = this.checkedIn;
-        fines = this.fines;
+    public Loan(Student student, Book book, Date checkedOut, Date checkedIn, boolean getFined,
+            int fines) {
+        setGetFined(getFined);
+        setStudent(student);
+        setBook(book);
+        setCheckedOut(checkedOut);
+        setCheckedIn(checkedIn);
+        setFines(fines);
           
+    }
+
+    public void setGetFined(boolean getFined) {
+        this.getFined = getFined;
+        
+    }
+    
+    public Boolean getGetFined() {
+        return getFined;
     }
 
     // Getters and Setters
@@ -57,11 +68,11 @@ public class Loan {
         this.checkedIn = checkedIn;
     }
 
-    public boolean getFines() {
+    public int getFines() {
         return fines;
     }
 
-    public void setFines(boolean fines) {
+    public void setFines(int fines) {
         this.fines = fines;
     }
     //////////////////////////////////////////////////
@@ -72,19 +83,21 @@ public class Loan {
      */
     public double addFines() {
         double totalFine = 0;
-        if (!fines) {
+        
             Date newCheckedOut = checkedOut;
-            Date newCheckedIn = new Date();
+            Date newCheckedIn = checkedIn;
             
-            long days = (newCheckedIn.getTime() - newCheckedOut.getTime()) / 86400000;
+            long days = (newCheckedOut.getTime() - newCheckedIn.getTime()) / 86400000;
             days = 0 - days;
             days = days - Library.checkoutLimit;
             
             if (days > 0) {
                 totalFine = days * Library.dailyFine;
+                getFined = true;
             } else {
-                totalFine = 0;       
-            }
+                totalFine = 0;      
+                getFined = false;
+            
         }
         return totalFine;   
     }
@@ -96,7 +109,7 @@ public class Loan {
         double totalFine = addFines();
         
         if (totalFine > 0) {
-            fines = true;
+            getFined = true;
         } else {
             System.out.println("no fine");
         }
@@ -109,5 +122,9 @@ public class Loan {
     public void renew(Date newCheckedOut) {
         checkedOut = newCheckedOut;
         
+    }
+    
+    public String toString() {
+        return student + " " + book + " " + checkedOut + " " + checkedIn + " " + getFined;
     }
 }

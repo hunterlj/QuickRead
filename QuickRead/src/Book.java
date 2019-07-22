@@ -10,6 +10,7 @@ public class Book {
     private String title; // title of book
     private String author; // author of book
     private String subject; // subject of book
+    private String description; // description of the book
     private boolean isCheckedIn; // true if checked out, false otherwise
     
     static int currentSerial = 0; // serial iterated by 1 for each new book
@@ -26,10 +27,9 @@ public class Book {
             serial = this.serial;
         }
         
-        title = this.title;
-        author = this.author;
-        subject = this.subject;
-        isCheckedIn = checkedIn;
+        setTitle(title);
+        setAuthor(author);
+        setStatus(checkedIn);
         
     }
     
@@ -40,6 +40,13 @@ public class Book {
     
     public int getSerial() {
         return serial;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    public void setAuthor(String author) {
+        this.author = author;
     }
     
     public String getTitle() {
@@ -92,5 +99,8 @@ public class Book {
         setStatus(true);
     }
     
+    public String toString() {
+        return title + " " + author;
+    }
     
 }

@@ -76,6 +76,7 @@ public class Library {
      * @return true 
      */
     public boolean addLibrarian(Librarian librarian) {
+        // INSERT INTO Users (username, password, name, position) VALUES (librarian.username, librarian.password, librarian.name, 'librarian') 
         librarian = this.librarian;
         allPeople.add(librarian);
         return true;
@@ -86,6 +87,11 @@ public class Library {
      * @param student
      */
     public void addStudent(Student student) {
+        // INSERT INTO Users (username, password, name, position) VALUES (student.username, student.password, student.name, 'student')
+        
+        // connect to db or use connection parameter
+        // run the query
+        // fetch sql.lastrowinsert ????
         allPeople.add(student);
     }
     
@@ -94,6 +100,7 @@ public class Library {
      * @param loan
      */
     public void addLoan(Loan loan) {
+        // INSERT INTO CheckedBooks (bookId, userId) VALUES (loan.book.id, loan.Student.id)
         allLoans.add(loan);
     }
     
@@ -102,6 +109,7 @@ public class Library {
      * @param book
      */
     public void addBook(Book book) {
+        // INSERT INTO Books (serial, title, author, subject, isCheckedIn) VALUES (book.serial, book.title, book.author, book.subject, book.isCheckedIn);
         allBooks.add(book);
     }
     
@@ -109,16 +117,19 @@ public class Library {
      * find students account by searching their name
      * @return
      */
-    public Student findStudent() {
+    public Student findStudent(String name) {
+        // SELECT * FROM Users WHERE name LIKE '%?%' AND position = 'student'
+        // ? indicates using a prepared statement. 
         return null;
     }
     
     /**
      * allows user to search the book array list 
-     * @return choice - users search results from ArrayList<Book> 
+     * @return choice - users search results from Database
      * @throws IOException
      */
-    public ArrayList<Book> findBook() throws IOException {
+    public Book findBook(String searchQuery) throws IOException {
+        // SQL STATEMENT: SELECT * FROM BOOK WHERE NAME LIKE '%searchQuery%'
         String choice;
         String title = "", subject = "", author = "";
         
@@ -129,7 +140,7 @@ public class Library {
      * constructs table of all books in library showing info
      */
     public void viewAllBooks() {
-        
+        // SQL Statement: SELECT * FROM BOOK
     }
     
     /**
@@ -140,6 +151,7 @@ public class Library {
      * @param subject
      */
     public void addBook(String title, String author, String subject) {
+        // SQL STATEMENT: INSERT INTO BOOK (title, author, subject) VALUES (title, author, subject)
         Book book = new Book(-1, title, author, subject, false);
         addBook(book);
     }
@@ -148,7 +160,13 @@ public class Library {
      * allows user to login using username and password
      * @return user - Person info
      */
-    public Person login() {
+    // possibly change this to boolean
+    public Person login(String username, String password) {
+        // SQL STATEMENT: SELECT username, password from Users WHERE username = username
+        
+        // connect
+        // fetch username / password from query
+        // check password = password
         return null;
     }
     
@@ -158,9 +176,9 @@ public class Library {
      */
     public Connection connect() {
         try {
-            String host = "";
-            String username = "QuickSearch";
-            String password = "SerialSystems";
+            String host = "jdbc:mysql://localhost:3306/LibraryDB?useSSL=false";
+            String username = "LibraryUser";
+            String password = "Password2525";
             Connection connection = DriverManager.getConnection(host,  username,  password);
             return connection;
         } catch (SQLException error) {

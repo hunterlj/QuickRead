@@ -16,6 +16,10 @@ public class Student extends Person {
         borrowedBooks = new ArrayList<Loan>();    
     }
     
+    public void printInfo() {
+        System.out.println(id + " "  + name + " ");
+    }
+    
     /**
      * Prints the list of borrowed books
      */
@@ -48,5 +52,9 @@ public class Student extends Person {
     // Getter
     public ArrayList<Loan> getBorrowedResources() {
         return borrowedBooks;
+    }
+    
+    public String toString() {
+        return id + " " + name;
     }
 }
