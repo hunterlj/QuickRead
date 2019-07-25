@@ -174,38 +174,38 @@ public class Library {
      * connects to host for SQL 
      * @return
      */
-    public static void main(String[] args) {
-//        try {
-//            String host = "jdbc:mysql://localhost:3306/LibraryDB?useSSL=false";
-//            String username = "LibraryUser";
-//            String password = "Password2525";
-//            Connection connection = DriverManager.getConnection(host,  username,  password);
-//            return connection;
-//        } catch (SQLException error) {
-//            System.out.println(error.getMessage());
-//            return null;
-//        }
-        
+    public Connection con() {
         try {
-            String myDriver = "com.mysql.jdbc.Driver";
-            String myURL = "jdcb:mysql://localhost/libraryDB";
-            Class.forName(myDriver);
-            Connection conn = DriverManager.getConnection(myURL, "libraryUser", "Password2525");
-               String query = "SELECT * FROM books";
-               
-               Statement st = conn.createStatement();
-               ResultSet rs = st.executeQuery(query);
-               while (rs.next()) {
-                   int id = rs.getInt("id");
-                   String title = rs.getString("title");
-                   System.out.println(id + ", " + title);
-               } 
-               
-               st.close();
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            String host = "jdbc:mysql://localhost:3306/LibraryDB?useSSL=false";
+            String username = "LibraryUser";
+            String password = "Password2525";
+            Connection connection = DriverManager.getConnection(host,  username,  password);
+            return connection;
+        } catch (SQLException error) {
+            System.out.println(error.getMessage());
+            return null;
         }
+        
+//        try {
+//            String myDriver = "com.mysql.jdbc.Driver";
+//            String myURL = "jdcb:mysql://localhost/libraryDB";
+//            Class.forName(myDriver);
+//            Connection conn = DriverManager.getConnection(myURL, "libraryUser", "Password2525");
+//               String query = "SELECT * FROM books";
+//               
+//               Statement st = conn.createStatement();
+//               ResultSet rs = st.executeQuery(query);
+//               while (rs.next()) {
+//                   int id = rs.getInt("id");
+//                   String title = rs.getString("title");
+//                   System.out.println(id + ", " + title);
+//               } 
+//               
+//               st.close();
+//
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
 
         
     }
