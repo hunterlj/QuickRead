@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLIntegrityConstraintViolationException;
 /**
  * QuickRead - Library Class
- * Main class for connection to SQL database.
+ * Main class for handling users and books
  * @author SerialSystems
  * 
  */

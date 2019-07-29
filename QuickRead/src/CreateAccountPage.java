@@ -1,10 +1,13 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -19,15 +22,15 @@ public class CreateAccountPage extends JFrame {
     private final JLabel lblFullName = new JLabel("Full Name:");
     private final JLabel lblPassword = new JLabel("Password:");
     private final JButton btnSignUp = new JButton("Sign Up!");
-    private final JTextField textField = new JTextField();
+    private final JTextField textFieldName = new JTextField();
     private final JLabel lblUsername = new JLabel("Username:");
-    private final JTextField textField_2 = new JTextField();
+    private final JTextField textFieldUsername = new JTextField();
     private final JLabel lblUser = new JLabel("User:");
     private final JRadioButton rdbtnStudent = new JRadioButton("Student");
     private final JRadioButton rdbtnLibrarian = new JRadioButton("Librarian");
     private final JRadioButton rdbtnAdmin = new JRadioButton("Admin");
-    private final JPasswordField passwordField = new JPasswordField();
     private final ButtonGroup buttonGroup = new ButtonGroup();
+    private final JTextField textFieldPassword = new JTextField();
 
     /**
      * Launch the application.
@@ -49,10 +52,12 @@ public class CreateAccountPage extends JFrame {
      * Create the frame.
      */
     public CreateAccountPage() {
-        textField_2.setBounds(130, 127, 162, 26);
-        textField_2.setColumns(10);
-        textField.setBounds(130, 74, 162, 26);
-        textField.setColumns(10);
+        textFieldPassword.setBounds(130, 166, 216, 26);
+        textFieldPassword.setColumns(10);
+        textFieldUsername.setBounds(130, 127, 216, 26);
+        textFieldUsername.setColumns(10);
+        textFieldName.setBounds(130, 74, 216, 26);
+        textFieldName.setColumns(10);
         initGUI();
     }
     private void initGUI() {
@@ -75,13 +80,37 @@ public class CreateAccountPage extends JFrame {
         btnSignUp.setBounds(161, 397, 115, 29);
         
         contentPane.add(btnSignUp);
+        btnSignUp.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                btnSignUpActionPerformed(e);
+            }
+            private void btnSignUpActionPerformed(ActionEvent e) {
+                String username = textFieldUsername.getText();
+                String password = textFieldPassword.getText();
+                String name = textFieldName.getText();
+                String position = null;
+                if (rdbtnStudent.isSelected()) {
+                    position = "student";    
+                }
+                else if (rdbtnAdmin.isSelected()) {
+                    position = "admin";
+                }
+                else if (rdbtnLibrarian.isSelected()) {
+                    position = "librarian";
+                }
+                else {
+                    JOptionPane.showMessageDialog(CreateAccountPage.this, "Please select user type!", "Create Account Error", JOptionPane.ERROR_MESSAGE);                  
+                }
+                ConfirmUser.addUser(username, password, name, position);
+            }
+        });
         
-        contentPane.add(textField);
+        contentPane.add(textFieldName);
         lblUsername.setBounds(37, 130, 85, 20);
         
         contentPane.add(lblUsername);
         
-        contentPane.add(textField_2);
+        contentPane.add(textFieldUsername);
         lblUser.setBounds(68, 228, 69, 20);
         
         contentPane.add(lblUser);
@@ -97,8 +126,7 @@ public class CreateAccountPage extends JFrame {
         rdbtnAdmin.setBounds(134, 318, 155, 29);
         
         contentPane.add(rdbtnAdmin);
-        passwordField.setBounds(130, 163, 162, 26);
         
-        contentPane.add(passwordField);
+        contentPane.add(textFieldPassword);
     }
 }
