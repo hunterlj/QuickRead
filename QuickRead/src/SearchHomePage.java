@@ -21,6 +21,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JLayeredPane;
 import javax.swing.ButtonGroup;
+import java.awt.Color;
+import javax.swing.UIManager;
 /**
  * QuickRead - LoginPage Class
  * Login window GUI
@@ -78,90 +80,103 @@ public class SearchHomePage extends JFrame {
         buttonGroup.add(rdbtnBookTitle);
         buttonGroup.add(rdbtnSubject);
         textField.setColumns(10);
-        lblQuickread.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblQuickread.setForeground(new Color(255, 255, 0));
+        lblQuickread.setFont(new Font("HanziPen SC", Font.BOLD, 35));
         lblQuickread.setHorizontalAlignment(SwingConstants.CENTER);
         initGUI();
     }
     private void initGUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1107, 725);
+        menuBar.setFont(new Font("Skia", Font.PLAIN, 14));
+        menuBar.setBackground(new Color(255, 255, 255));
         
         setJMenuBar(menuBar);
+        mnSignIn.setBackground(new Color(255, 255, 255));
+        mnSignIn.setFont(new Font("Apple SD Gothic Neo", Font.PLAIN, 14));
         
         menuBar.add(mnSignIn);
+        mnCreateAccount.setFont(new Font("AppleGothic", Font.PLAIN, 14));
         
         menuBar.add(mnCreateAccount);
         contentPane = new JPanel();
+        contentPane.setBackground(new Color(153, 204, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         GroupLayout gl_contentPane = new GroupLayout(contentPane);
         gl_contentPane.setHorizontalGroup(
-            gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                        .addGroup(gl_contentPane.createSequentialGroup()
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                .addComponent(lblQuickread, GroupLayout.PREFERRED_SIZE, 291, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                            .addGap(225)
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addGap(88)
-                                    .addComponent(lblBy))
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addGap(60)
-                                    .addComponent(lblSearch)))
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addGap(7)
-                                    .addComponent(rdbtnBookTitle)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(rdbtnBookAuthor)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(rdbtnSubject))
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(textField)))
-                            .addPreferredGap(ComponentPlacement.RELATED)
-                            .addComponent(btnFind)
-                            .addGap(31)
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-                                .addComponent(btnSignIn, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnSignUp, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(gl_contentPane.createSequentialGroup()
-                            .addGap(27)
-                            .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 940, GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap(11, Short.MAX_VALUE))
+        	gl_contentPane.createParallelGroup(Alignment.LEADING)
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        					.addGap(46)
+        					.addComponent(lblQuickread, GroupLayout.PREFERRED_SIZE, 416, GroupLayout.PREFERRED_SIZE)
+        					.addGap(60)
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        						.addGroup(gl_contentPane.createSequentialGroup()
+        							.addGap(88)
+        							.addComponent(lblBy))
+        						.addGroup(gl_contentPane.createSequentialGroup()
+        							.addGap(60)
+        							.addComponent(lblSearch)))
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+        						.addGroup(gl_contentPane.createSequentialGroup()
+        							.addGap(7)
+        							.addComponent(rdbtnBookTitle)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(rdbtnBookAuthor)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(rdbtnSubject))
+        						.addGroup(gl_contentPane.createSequentialGroup()
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(textField)))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(btnFind)
+        					.addGap(31)
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        						.addComponent(btnSignIn)
+        						.addComponent(btnSignUp, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addGap(27)
+        					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 940, GroupLayout.PREFERRED_SIZE)))
+        			.addContainerGap(32, Short.MAX_VALUE))
         );
-        buttonGroup.add(rdbtnBookAuthor);
         gl_contentPane.setVerticalGroup(
-            gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                        .addGroup(gl_contentPane.createSequentialGroup()
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addGap(21)
-                                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                                        .addComponent(lblSearch)
-                                        .addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnFind))
-                                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                                        .addComponent(rdbtnBookAuthor)
-                                        .addComponent(rdbtnBookTitle)
-                                        .addComponent(lblBy)
-                                        .addComponent(rdbtnSubject)))
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addComponent(btnSignIn)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(btnSignUp)))
-                            .addGap(6)
-                            .addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addComponent(lblQuickread, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                    .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 491, GroupLayout.PREFERRED_SIZE))
+        	gl_contentPane.createParallelGroup(Alignment.LEADING)
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addGap(21)
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(lblSearch)
+        						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btnFind)
+        						.addComponent(btnSignIn))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(rdbtnBookAuthor)
+        						.addComponent(rdbtnBookTitle)
+        						.addComponent(lblBy)
+        						.addComponent(rdbtnSubject)
+        						.addComponent(btnSignUp))
+        					.addGap(6)
+        					.addComponent(layeredPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addGap(22)
+        					.addComponent(lblQuickread, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)))
+        			.addPreferredGap(ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+        			.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 491, GroupLayout.PREFERRED_SIZE))
         );
+        btnSignIn.setBackground(new Color(51, 102, 255));
+        lblSearch.setFont(new Font("STHeiti", Font.PLAIN, 13));
+        lblBy.setFont(new Font("STHeiti", Font.PLAIN, 13));
+        rdbtnBookTitle.setFont(new Font("STHeiti", Font.PLAIN, 13));
+        rdbtnBookAuthor.setFont(new Font("STHeiti", Font.PLAIN, 13));
+        rdbtnSubject.setFont(new Font("STHeiti", Font.PLAIN, 13));
+        btnFind.setBackground(new Color(255, 255, 102));
+        buttonGroup.add(rdbtnBookAuthor);
+        menuBar_1.setBackground(new Color(51, 153, 255));
         
         scrollPane.setColumnHeaderView(menuBar_1);
         
@@ -179,3 +194,4 @@ public class SearchHomePage extends JFrame {
         contentPane.setLayout(gl_contentPane);
     }
 }
+
