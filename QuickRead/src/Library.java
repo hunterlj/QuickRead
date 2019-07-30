@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import com.mysql.jdbc.ResultSetMetaData;
+
 import java.sql.Types;
 import java.sql.PreparedStatement;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -128,10 +131,9 @@ public class Library {
      * @return choice - users search results from Database
      * @throws IOException
      */
-    public Book findBook(String searchQuery) throws IOException {
+    public Book findBook(Connection conn) throws IOException {
         // SQL STATEMENT: SELECT * FROM BOOK WHERE NAME LIKE '%searchQuery%'
-        String choice;
-        String title = "", subject = "", author = "";
+        
         
         return null;
     }
@@ -139,8 +141,21 @@ public class Library {
     /**
      * constructs table of all books in library showing info
      */
-    public void viewAllBooks() {
-        // SQL Statement: SELECT * FROM BOOK
+    public void viewAllBooks() throws SQLException {
+        try (Connection conn = LibraryConnection.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("select * from books");
+            ResultSet rs = ps.executeQuery();
+            ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
+            int columns = rsmd.getColumnCount();
+            String Row[];
+            Row = new String[columns];
+            while (rs.next()) {
+                for(int i = 1; i <= columns; i++) {
+                    Row[i-1] = rs.getString(i);
+                }
+                
+            }
+        }
     }
     
     /**

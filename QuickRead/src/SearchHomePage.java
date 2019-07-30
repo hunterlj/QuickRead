@@ -5,6 +5,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+
 import javax.swing.JSplitPane;
 import javax.swing.JScrollBar;
 import javax.swing.JTextField;
@@ -19,11 +28,13 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JLayeredPane;
 import javax.swing.ButtonGroup;
+import javax.swing.JTable;
 /**
  * QuickRead - LoginPage Class
  * Login window GUI
@@ -41,22 +52,12 @@ public class SearchHomePage extends JFrame {
     private final JLabel lblQuickread = new JLabel("QuickRead Library System");
     private final JButton btnSignIn = new JButton("Sign In");
     private final JButton btnSignUp = new JButton("Sign Up");
-    private final JMenuBar menuBar = new JMenuBar();
     private final JRadioButton rdbtnSubject = new JRadioButton("Subject");
     private final JTextField textField = new JTextField();
     private final JButton btnFind = new JButton("Find");
     private final JLayeredPane layeredPane = new JLayeredPane();
-    private final JScrollPane scrollPane = new JScrollPane();
-    private final JMenu mnSignIn = new JMenu("Sign In");
-    private final JMenu mnCreateAccount = new JMenu("Create Account");
-    private final JMenuBar menuBar_1 = new JMenuBar();
-    private final JMenu mnSerial = new JMenu("Serial");
-    private final JMenu mnTitle = new JMenu("Title");
-    private final JMenu mnAuthor = new JMenu("Author");
-    private final JMenu mnSubject = new JMenu("Subject");
-    private final JMenu mnDescription = new JMenu("Description");
-    private final JMenu mnCopiesAvaliable = new JMenu("Copies Avaliable");
     private final ButtonGroup buttonGroup = new ButtonGroup();
+    private final JTable table = new JTable();
 
     /**
      * Launch the application.
@@ -67,6 +68,7 @@ public class SearchHomePage extends JFrame {
                 try {
                     SearchHomePage frame = new SearchHomePage();
                     frame.setVisible(true);
+                    frame.setResizable(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -77,7 +79,7 @@ public class SearchHomePage extends JFrame {
     /**
      * Create the frame.
      */
-    public SearchHomePage() {
+    public SearchHomePage() throws SQLException {
         buttonGroup.add(rdbtnBookTitle);
         buttonGroup.add(rdbtnSubject);
         textField.setBounds(645, 27, 232, 26);
@@ -85,46 +87,39 @@ public class SearchHomePage extends JFrame {
         lblQuickread.setBounds(5, 5, 291, 58);
         lblQuickread.setFont(new Font("Tahoma", Font.BOLD, 20));
         lblQuickread.setHorizontalAlignment(SwingConstants.CENTER);
+        
         initGUI();
+        
+        DefaultTableModel model;
+        model = (DefaultTableModel) table.getModel();
+        try (Connection conn = LibraryConnection.getConnection()){
+            PreparedStatement ps = conn.prepareStatement("select * from books", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = ps.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columns = rsmd.getColumnCount();
+            String Row[];
+            Row = new String[columns];
+            while(rs.next()) {
+                for (int i = 1; i <= columns; i++) {
+                    Row[i-1] = rs.getString(i);
+                }
+                model.addRow(Row);
+            }
+            conn.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        
     }
     private void initGUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1107, 725);
 
-        setJMenuBar(menuBar);
-
-        menuBar.add(mnSignIn);
-
-
-        menuBar.add(mnCreateAccount);
-        mnCreateAccount.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mnCreateAccountActionPerformed(e);
-            }
-            private void mnCreateAccountActionPerformed(ActionEvent e) {
-                CreateAccountPage.main(new String[] {});
-            }
-        });
-
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         buttonGroup.add(rdbtnBookAuthor);
-        scrollPane.setBounds(32, 142, 940, 491);
-
-        scrollPane.setColumnHeaderView(menuBar_1);
-
-        menuBar_1.add(mnSerial);
-
-        menuBar_1.add(mnTitle);
-
-        menuBar_1.add(mnAuthor);
-
-        menuBar_1.add(mnSubject);
-
-        menuBar_1.add(mnDescription);
-
-        menuBar_1.add(mnCopiesAvaliable);
         contentPane.setLayout(null);
         contentPane.add(lblQuickread);
         layeredPane.setBounds(5, 102, 1, 1);
@@ -148,8 +143,48 @@ public class SearchHomePage extends JFrame {
                 btnFindActionPerformed(e);
             }
             private void btnFindActionPerformed(ActionEvent e) {
-                // show search results
-                // use library search book method
+                DefaultTableModel model;
+                model = (DefaultTableModel) table.getModel();
+                while (model.getRowCount() > 0) {
+                    model.removeRow(model.getRowCount()-1);
+                }
+                String search = "%" + textField.getText() + "%";
+                try (Connection con = LibraryConnection.getConnection()){
+                    PreparedStatement ps = con.prepareStatement("SELECT * FROM books WHERE title LIKE ?", ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+                    ps.setString(1, search);
+                    ResultSet rs = ps.executeQuery();
+                    ResultSetMetaData rsmd = rs.getMetaData();
+                    int columns = rsmd.getColumnCount();
+                            
+                    String Row[];
+                    Row = new String[columns];
+                    while(rs.next()){
+                        for(int i=1;i<=columns;i++){
+                            Row[i-1]=rs.getString(i);
+                            }
+                         model.addRow(Row);
+                    }
+                    int rowcount = model.getRowCount();
+                     System.out.println(rowcount);
+                    if(rowcount==0)
+                    {
+                        String NoRow[];
+                        NoRow = new String[7];
+                        NoRow[3]="NO";
+                        NoRow[4]="RESULT";
+                        NoRow[0]="";
+                        NoRow[1]="";
+                        NoRow[2]="";
+                        NoRow[5]="";
+                        NoRow[6]="";
+                        model.addRow(NoRow);
+                             
+                    }
+                    con.close();
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+                
             }
         });
 
@@ -166,6 +201,17 @@ public class SearchHomePage extends JFrame {
 
         btnSignUp.setBounds(980, 43, 89, 29);
         contentPane.add(btnSignUp);
-        contentPane.add(scrollPane);
+        table.setBounds(15, 123, 1055, 516);
+        
+        
+        
+        contentPane.add(table);
+        
+        
     }
 }
+    
+    
+    
+    
+
