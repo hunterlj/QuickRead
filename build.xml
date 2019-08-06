@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="QuickRead">
+    <property environment="env"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="../../.p2/pool/plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
+        <pathelement location="../../.p2/pool/plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
+    </path>
+    <path id="QuickRead.classpath">
+        <pathelement location="bin"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="../../Downloads/mysql-connector-java-5.1.47.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="QuickRead.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target name="CreateAccountPage">
+        <java classname="CreateAccountPage" failonerror="true" fork="yes">
+            <classpath refid="QuickRead.classpath"/>
+        </java>
+    </target>
+    <target name="Library">
+        <java classname="Library" failonerror="true" fork="yes">
+            <classpath refid="QuickRead.classpath"/>
+        </java>
+    </target>
+    <target name="LibraryConnection">
+        <java classname="LibraryConnection" failonerror="true" fork="yes">
+            <classpath refid="QuickRead.classpath"/>
+        </java>
+    </target>
+    <target name="LibraryPrepared">
+        <java classname="LibraryPrepared" failonerror="true" fork="yes">
+            <classpath refid="QuickRead.classpath"/>
+        </java>
+    </target>
+    <target name="LibrarySQL">
+        <java classname="LibrarySQL" failonerror="true" fork="yes">
+            <classpath refid="QuickRead.classpath"/>
+        </java>
+    </target>
+    <target name="LoanTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="LoanTest" todir="${junit.output.dir}"/>
+            <jvmarg line="-ea"/>
+            <classpath refid="QuickRead.classpath"/>
+        </junit>
+    </target>
+    <target name="LoginPage">
+        <java classname="LoginPage" failonerror="true" fork="yes">
+            <classpath refid="QuickRead.classpath"/>
+        </java>
+    </target>
+    <target name="SearchHomePage">
+        <java classname="SearchHomePage" failonerror="true" fork="yes">
+            <classpath refid="QuickRead.classpath"/>
+        </java>
+    </target>
+    <target name="StudentHome">
+        <java classname="StudentHome" failonerror="true" fork="yes">
+            <classpath refid="QuickRead.classpath"/>
+        </java>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>
