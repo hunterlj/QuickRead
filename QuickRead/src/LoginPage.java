@@ -155,7 +155,7 @@ public class LoginPage extends JFrame {
                 ConfirmUser.validate(user, pass, pos);
                 if (ConfirmUser.validate(user, pass, pos)) {
                     // get rid of window 
-                    StudentHome.main(new String[] {user,pass});
+                    StudentHome.main(new String[] {user});
                 } else {
                     JOptionPane.showMessageDialog(LoginPage.this, "Incorrect username or password!", "Login Error", JOptionPane.ERROR_MESSAGE);
                     username.setText("");

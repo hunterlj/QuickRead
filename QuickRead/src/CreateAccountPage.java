@@ -102,6 +102,7 @@ public class CreateAccountPage extends JFrame {
                     JOptionPane.showMessageDialog(CreateAccountPage.this, "Please select user type!", "Create Account Error", JOptionPane.ERROR_MESSAGE);                  
                 }
                 ConfirmUser.addUser(username, password, name, position);
+                StudentHome.main(new String[] {username, password});
             }
         });
         
