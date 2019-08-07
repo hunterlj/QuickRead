@@ -97,10 +97,12 @@ public class CreateAccountPage extends JFrame {
                 else if (rdbtnAdmin.isSelected()) {
                     position = "admin";
                     ConfirmUser.addUser(username, password, name, position);
+                    SearchHomePage.main(new String[] {username});
                 }
                 else if (rdbtnLibrarian.isSelected()) {
                     position = "librarian";
                     ConfirmUser.addUser(username, password, name, position);
+                    SearchHomePage.main(new String[] {username});
                 }
                 else {
                     JOptionPane.showMessageDialog(CreateAccountPage.this, "Please select user type!", "Create Account Error", JOptionPane.ERROR_MESSAGE);                  

@@ -158,11 +158,16 @@ public class SearchHomePage extends JFrame {
                 btnAccountActionPerformed(e);
             }
             private void btnAccountActionPerformed(ActionEvent e) {
-                if (user != null) {
-                    
-                    StudentHome.main(new String[] {user});
-                } else {
+                if (user == null) {
                     JOptionPane.showMessageDialog(SearchHomePage.this, "Please Sign In or Create Account","Error Accessing Account!", JOptionPane.ERROR_MESSAGE);
+                }
+                String position = ConfirmUser.getPosition(user);
+                if (position.equals("student")) {                   
+                    StudentHome.main(new String[] {user});
+                } else if (position.equals("librarian")) {
+                    LibrarianHomePage.main(new String[] {user});
+                } else if (position.equals("admin")) {
+                    AdminHomePage.main(new String[] {user});
                 }
             }
         });

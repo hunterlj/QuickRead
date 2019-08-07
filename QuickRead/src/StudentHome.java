@@ -28,6 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JTable;
+import javax.swing.JMenuItem;
 
 public class StudentHome extends JFrame {
 
@@ -50,9 +51,11 @@ public class StudentHome extends JFrame {
     private final JScrollPane scrollPane_1 = new JScrollPane();
     private final JTable table_1 = new JTable();
     private final JTextField textField_3 = new JTextField();
-    private final JTextField textField_4 = new JTextField();
 
     public static String user;
+    private final JMenuBar menuBar = new JMenuBar();
+    private final JMenuItem mntmGo = new JMenuItem("Go ");
+    private final JMenu mnNewMenu = new JMenu("New menu");
     /**
      * Launch the application.
      */
@@ -74,9 +77,6 @@ public class StudentHome extends JFrame {
      * Create the frame.
      */
     public StudentHome() throws SQLException {
-        textField_4.setEditable(false);
-        textField_4.setBounds(176, 188, 95, 26);
-        textField_4.setColumns(10);
         textField_3.setEditable(false);
         textField_3.setBounds(399, 188, 95, 26);
         textField_3.setColumns(10);
@@ -213,8 +213,15 @@ public class StudentHome extends JFrame {
         scrollPane_1.setViewportView(table_1);
         
         contentPane.add(textField_3);
+        menuBar.setBounds(477, 0, 139, 31);
         
-        contentPane.add(textField_4);
+        contentPane.add(menuBar);
+        mntmGo.setBounds(439, 0, 177, 31);
+        
+        contentPane.add(mntmGo);
+        mnNewMenu.setBounds(469, 0, 147, 31);
+        
+        contentPane.add(mnNewMenu);
 
         try (Connection conn = LibraryConnection.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
