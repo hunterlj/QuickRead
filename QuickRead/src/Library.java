@@ -167,8 +167,8 @@ public class Library {
      */
     public void addBook(String title, String author, String subject, String description) {
         // SQL STATEMENT: INSERT INTO BOOK (title, author, subject) VALUES (title, author, subject)
-        Book book = new Book(-1, title, author, subject, false, description);
-        addBook(book);
+        //Book book = new Book(-1, title, author, subject, false, description);
+       // addBook(book);
     }
     
     /**
@@ -248,8 +248,8 @@ public class Library {
                 String subject = set.getString("SUBJECT");
                 String description = set.getString("DESCRIPTION");
                 boolean isCheckedIn = set.getBoolean("IS_CHECKEDIN");
-                Book book = new Book(serial, title, subject, author, isCheckedIn, description);
-                addBook(book);
+          //      Book book = new Book(serial, title, subject, author, isCheckedIn, description);
+          //      addBook(book);
                 
                 if(topSerial < serial) {
                     topSerial = serial;
@@ -257,7 +257,7 @@ public class Library {
             }
         }while(set.next());
         
-        Book.setSerial(topSerial);
+      //  Book.setSerial(topSerial);
         }
         
         // Create Loan

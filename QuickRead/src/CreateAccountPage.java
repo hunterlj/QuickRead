@@ -90,19 +90,21 @@ public class CreateAccountPage extends JFrame {
                 String name = textFieldName.getText();
                 String position = null;
                 if (rdbtnStudent.isSelected()) {
-                    position = "student";    
+                    position = "student";
+                    ConfirmUser.addUser(username, password, name, position);
+                    SearchHomePage.main(new String[] {username});
                 }
                 else if (rdbtnAdmin.isSelected()) {
                     position = "admin";
+                    ConfirmUser.addUser(username, password, name, position);
                 }
                 else if (rdbtnLibrarian.isSelected()) {
                     position = "librarian";
+                    ConfirmUser.addUser(username, password, name, position);
                 }
                 else {
                     JOptionPane.showMessageDialog(CreateAccountPage.this, "Please select user type!", "Create Account Error", JOptionPane.ERROR_MESSAGE);                  
                 }
-                ConfirmUser.addUser(username, password, name, position);
-                StudentHome.main(new String[] {username, password});
             }
         });
         

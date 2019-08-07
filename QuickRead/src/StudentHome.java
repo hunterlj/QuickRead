@@ -90,11 +90,17 @@ public class StudentHome extends JFrame {
         
         DefaultTableModel model;
         model = (DefaultTableModel) table.getModel();
-        
+        int id = 0;
         try(Connection conn = LibraryConnection.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT issuedbook.bookId, books.title, issuedbook.issueDate, issuedbook.returnDate"
-                    + "FROM books, issuedbook WHERE books.id = issuedbook.bookId AND issuedbook.userId = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ps.setString(1, user);
+            PreparedStatement ps1 = conn.prepareStatement("SELECT id FROM users WHERE username = ?");
+            ps1.setString(1, user);
+            ResultSet rs1 = ps1.executeQuery();
+            while(rs1.next()) {
+                id = rs1.getInt(1);
+            }
+            
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM issuedbook WHERE userId = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
             int column = rsmd.getColumnCount();
@@ -209,23 +215,23 @@ public class StudentHome extends JFrame {
         contentPane.add(textField_3);
         
         contentPane.add(textField_4);
-        
+
         try (Connection conn = LibraryConnection.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE id = 1");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
+            ps.setString(1,  user);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 String name = rs.getString(4);
                 String username = rs.getString(2);
                 String password = rs.getString(3);
-                
+                             
                 textField.setText(name);
                 textField_1.setText(username);
                 textField_2.setText(password);
 
-            }
+            }            
             
-            PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM loans WHERE id.users = 1");
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

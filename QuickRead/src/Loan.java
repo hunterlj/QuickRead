@@ -1,130 +1,51 @@
-import java.util.Date;
-/**
- * QuickRead - Loan Class
- * Handles every loan for library users by book
- * @author SerialSystems
- * 
- */
+import java.sql.*;
+import javax.swing.JTextField;
+
 public class Loan {
 
-    private Student student; // student object
-    private Book book; // book object
-    private Date checkedOut; // date book is checked out
-    private Date checkedIn; // date book is checked in
-    private boolean getFined = false;
-    private int fines; 
-    
-    // Constructor
-    public Loan(Student student, Book book, Date checkedOut, Date checkedIn, boolean getFined,
-            int fines) {
-        setGetFined(getFined);
-        setStudent(student);
-        setBook(book);
-        setCheckedOut(checkedOut);
-        setCheckedIn(checkedIn);
-        setFines(fines);
-          
-    }
-
-    public void setGetFined(boolean getFined) {
-        this.getFined = getFined;
-        
-    }
-    
-    public Boolean getGetFined() {
-        return getFined;
-    }
-
-    // Getters and Setters
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public Date getCheckedOut() {
-        return checkedOut;
-    }
-
-    public void setCheckedOut(Date checkedOut) {
-        this.checkedOut = checkedOut;
-    }
-
-    public Date getCheckedIn() {
-        return checkedIn;
-    }
-
-    public void setCheckedIn(Date checkedIn) {
-        this.checkedIn = checkedIn;
-    }
-
-    public int getFines() {
-        return fines;
-    }
-
-    public void setFines(int fines) {
-        this.fines = fines;
-    }
-    //////////////////////////////////////////////////
-    
-    /**
-     * Calculates fines by each book and adds it to students total fines
-     * @return totalFine - double  
-     */
-    public double addFines() {
-        double totalFine = 0;
-        
-            Date newCheckedOut = checkedOut;
-            Date newCheckedIn = checkedIn;
-            
-            long days = (newCheckedOut.getTime() - newCheckedIn.getTime()) / 86400000;
-            days = 0 - days;
-            days = days - Library.checkoutLimit;
-            
-            if (days > 0) {
-                totalFine = days * Library.dailyFine;
-                getFined = true;
-            } else {
-                totalFine = 0;      
-                getFined = false;
-            
+    public static int IssueBook(int bookId, int userId, String issueDate, String returnDate) {
+        int status = 0;
+        try (Connection con = LibraryConnection.getConnection()){           
+            PreparedStatement ps = con.prepareStatement("insert into issuedbook values(?, ?, ?, ?)");
+            ps.setInt(1,bookId);
+            ps.setInt(2, userId);
+            ps.setString(3, issueDate);
+            ps.setString(4, returnDate);
+            status = ps.executeUpdate();
+            con.close();
+        } catch(Exception e) {
+            System.out.println(e);
         }
-        return totalFine;   
+        return status;
     }
-    
-    /**
-     * Prompts user to pay fines and allows them to do so 
-     */
-    public void payFine() {
-        double totalFine = addFines();
-        
-        if (totalFine > 0) {
-            getFined = true;
-        } else {
-            System.out.println("no fine");
+
+
+    public static int ReturnBook(int bookId,int userId) {
+        int status = 0;
+        try (Connection con = LibraryConnection.getConnection()){     
+            PreparedStatement ps = con.prepareStatement("delete from issuedbook where bookId = ? and userId = ?");
+            ps.setInt(1, bookId);
+            ps.setInt(2, userId);
+            status = ps.executeUpdate();
+            con.close();
+        } catch(Exception e) { 
+            System.out.println(e);
         }
+        return status;
     }
-    
-    /**
-     * gives a book its new check out date 
-     * @param newCheckedOut
-     */
-    public void renew(Date newCheckedOut) {
-        checkedOut = newCheckedOut;
-        
+
+    public static boolean CheckIssuedBook(int BookID) {
+        boolean status = false;
+        try (Connection con = LibraryConnection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("select * from issuedbook where bookId = ?"); 
+            ps.setInt(1, BookID);
+            ResultSet rs = ps.executeQuery();
+            status = rs.next();
+            con.close();
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+        return status;
     }
-    
-    public String toString() {
-        return student + " " + book + " " + checkedOut + " " + checkedIn + " " + getFined;
-    }
+
 }

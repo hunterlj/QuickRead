@@ -68,6 +68,10 @@ public class SearchHomePage extends JFrame {
     private final ButtonGroup buttonGroup = new ButtonGroup();
     private JTable table = new JTable();
     private final JScrollPane scrollPane = new JScrollPane();
+    private final JButton btnAccount = new JButton("Account Page");
+    
+    public static String user;
+    
 
     /**
      * Launch the application.
@@ -84,6 +88,7 @@ public class SearchHomePage extends JFrame {
                 }
             }
         });
+        user = args[0];
     }
 
     /**
@@ -94,7 +99,7 @@ public class SearchHomePage extends JFrame {
         buttonGroup.add(rdbtnSubject);
         textField.setBounds(645, 27, 232, 26);
         textField.setColumns(10);
-        lblQuickread.setBounds(5, 5, 291, 58);
+        lblQuickread.setBounds(213, 9, 291, 58);
         lblQuickread.setFont(new Font("Tahoma", Font.BOLD, 20));
         lblQuickread.setHorizontalAlignment(SwingConstants.CENTER);
         
@@ -146,6 +151,24 @@ public class SearchHomePage extends JFrame {
         contentPane.add(rdbtnSubject);
         contentPane.add(textField);
 
+        btnAccount.setBounds(0, 5, 129, 29);
+        contentPane.add(btnAccount);
+        btnAccount.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                btnAccountActionPerformed(e);
+            }
+            private void btnAccountActionPerformed(ActionEvent e) {
+                if (user != null) {
+                    
+                    StudentHome.main(new String[] {user});
+                } else {
+                    JOptionPane.showMessageDialog(SearchHomePage.this, "Please Sign In or Create Account","Error Accessing Account!", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
+        
+        
         btnFind.setBounds(886, 26, 63, 29);
         contentPane.add(btnFind);
         btnFind.addActionListener(new ActionListener() {
@@ -241,12 +264,23 @@ public class SearchHomePage extends JFrame {
                 btnSignInActionPerformed(e);
             }
             private void btnSignInActionPerformed(ActionEvent e) {
+                dispose();
                 LoginPage.main(new String[] {});
             }
         });
 
         btnSignUp.setBounds(980, 43, 89, 29);
         contentPane.add(btnSignUp);
+        btnSignUp.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                btnSignUpActionPerformed(e);
+            }
+            private void btnSignUpActionPerformed(ActionEvent e) {
+                dispose();
+                CreateAccountPage.main(new String[] {});
+            }
+        });
+        
         scrollPane.setBounds(15, 123, 1054, 516);
         
         contentPane.add(scrollPane);
@@ -273,47 +307,38 @@ public class SearchHomePage extends JFrame {
         table.getColumnModel().getColumn(3).setPreferredWidth(80);
         table.getColumnModel().getColumn(4).setPreferredWidth(300);
         scrollPane.setViewportView(table);
-        
+
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
-        JPopupMenu popMenu = new JPopupMenu();    
-        JMenuItem menuItem1 = new JMenuItem("Check out this book");
-        popMenu.add(menuItem1);
-        
-        table.setComponentPopupMenu(popMenu);
-//        
-//        table.addMouseListener(new MouseAdapter() {
-//            public void mousePressed(MouseEvent e) {
-//                pointPressed(e);
-//            }
-//            private void pointPressed(MouseEvent e) {
-//                Point point = e.getPoint();
-//                int currentRow = table.rowAtPoint(point);
-//                int currentColumn = 0;
-//                table.setRowSelectionInterval(currentRow, currentRow);
-//                table.setColumnSelectionInterval(0,1);
-//                
-//                int selected = (int) table.getValueAt(currentRow, currentColumn);
-//                
-//                try (Connection con = LibraryConnection.getConnection()){
-//                    if (rdbtnBookTitle.isSelected()) {
-//                    PreparedStatement ps = con.prepareStatement("SELECT id FROM books WHERE books.id = issuedbook.bookId", ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-//                    ResultSet rs = ps.executeQuery();                
-//                if(rs = ) {
-//                    
-//                    
-//                } else {
-//                    JOptionPane.showMessageDialog(contentPane, "This book is currently unavailable", "Sorry!", JOptionPane.INFORMATION_MESSAGE);
-//                }
-//            }
-//        });
-        
-        
-        
+       
+        table.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                pointPressed(e);
+            }
+            private void pointPressed(MouseEvent e) {
+                Point point = e.getPoint();
+                int currentRow = table.rowAtPoint(point);
+                int currentColumn = 0;
+                table.setRowSelectionInterval(currentRow, currentRow);
+                table.setColumnSelectionInterval(0,1);
+
+                String selected = (String) table.getValueAt(currentRow, currentColumn);
+
+                String id = null;
+                try(Connection conn = LibraryConnection.getConnection()) {
+                    PreparedStatement ps1 = conn.prepareStatement("SELECT id FROM users WHERE username = ?");
+                    ps1.setString(1, user);
+                    ResultSet rs1 = ps1.executeQuery();
+                    while(rs1.next()) {
+                        id = rs1.getString(1);
+                    }
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+                
+                IssueBookPage.main(new String[] {selected, id});                                
+            }
+        });
     }
 }
-    
-    
-       
-        
-        
+                
