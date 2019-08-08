@@ -45,10 +45,12 @@ public class ConfirmUser {
         String position = "";
         try {
             Connection con = LibraryConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("select position from Users where username = ?");
+            PreparedStatement ps = con.prepareStatement("select position from users where username = ?");
             ps.setString(1, user);            
             ResultSet rs = ps.executeQuery();
-            position = rs.getString(1);
+            while(rs.next()) {
+                position = rs.getString(1);
+            }
             con.close();
         } catch (Exception e) {
             System.out.println(e);

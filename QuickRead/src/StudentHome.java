@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
@@ -29,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JTable;
 import javax.swing.JMenuItem;
+import javax.swing.JButton;
 
 public class StudentHome extends JFrame {
 
@@ -38,7 +40,6 @@ public class StudentHome extends JFrame {
     private final JLabel lblUsername = new JLabel("Username:");
     private final JLabel lblPassword = new JLabel("Password:");
     private final JLabel lblCurrentBooksIssued = new JLabel("Current Books Issued:");
-    private final JLabel lblFines = new JLabel("Total Fines:");
     private final JScrollPane scrollPane = new JScrollPane();
     private final JTextField textField = new JTextField();
     private final JTextField textField_1 = new JTextField();
@@ -47,15 +48,9 @@ public class StudentHome extends JFrame {
     String username = "";
     String password = "";
     private final JTable table = new JTable();
-    private final JLabel lblOverdueBooks = new JLabel("OverDue Books:");
-    private final JScrollPane scrollPane_1 = new JScrollPane();
-    private final JTable table_1 = new JTable();
-    private final JTextField textField_3 = new JTextField();
 
     public static String user;
-    private final JMenuBar menuBar = new JMenuBar();
-    private final JMenuItem mntmGo = new JMenuItem("Go ");
-    private final JMenu mnNewMenu = new JMenu("New menu");
+    private final JButton btnBackToSearch = new JButton("Back to Search Page");
     /**
      * Launch the application.
      */
@@ -77,9 +72,6 @@ public class StudentHome extends JFrame {
      * Create the frame.
      */
     public StudentHome() throws SQLException {
-        textField_3.setEditable(false);
-        textField_3.setBounds(399, 188, 95, 26);
-        textField_3.setColumns(10);
         textField_2.setBounds(95, 125, 313, 26);
         textField_2.setColumns(10);
         textField_1.setBounds(96, 86, 312, 26);
@@ -90,6 +82,9 @@ public class StudentHome extends JFrame {
         
         DefaultTableModel model;
         model = (DefaultTableModel) table.getModel();
+        while (model.getRowCount() > 0) {
+            model.removeRow(model.getRowCount()-1);
+        }
         int id = 0;
         try(Connection conn = LibraryConnection.getConnection()) {
             PreparedStatement ps1 = conn.prepareStatement("SELECT id FROM users WHERE username = ?");
@@ -98,8 +93,9 @@ public class StudentHome extends JFrame {
             while(rs1.next()) {
                 id = rs1.getInt(1);
             }
+                  
             
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM issuedbook WHERE userId = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement ps = conn.prepareStatement("SELECT bookId, issueddate, returndate FROM issuedbook WHERE userId = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
@@ -122,7 +118,7 @@ public class StudentHome extends JFrame {
     }
     private void initGUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 638, 739);
+        setBounds(100, 100, 638, 533);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -142,34 +138,30 @@ public class StudentHome extends JFrame {
         lblCurrentBooksIssued.setBounds(15, 191, 169, 20);
         
         contentPane.add(lblCurrentBooksIssued);
-        lblFines.setBounds(311, 191, 97, 20);
-        
-        contentPane.add(lblFines);
         scrollPane.setBounds(15, 236, 586, 197);
         
         contentPane.add(scrollPane);
         table.setModel(new DefaultTableModel(
             new Object[][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
             },
             new String[] {
-                "Serial", "Title", "Issued Date", "Return Date"
+                "Book Serial", "Issued Date", "Return Date"
             }
         ));
-        table.getColumnModel().getColumn(0).setPreferredWidth(50);
+        table.getColumnModel().getColumn(0).setPreferredWidth(106);
         table.getColumnModel().getColumn(0).setMinWidth(10);
-        table.getColumnModel().getColumn(1).setPreferredWidth(125);
-        table.getColumnModel().getColumn(2).setPreferredWidth(95);
-        table.getColumnModel().getColumn(3).setPreferredWidth(96);
+        table.getColumnModel().getColumn(1).setPreferredWidth(202);
+        table.getColumnModel().getColumn(2).setPreferredWidth(194);
         
         scrollPane.setViewportView(table);
         
@@ -181,47 +173,21 @@ public class StudentHome extends JFrame {
         textField_1.setEditable(false);
         contentPane.add(textField_2);
         textField_2.setEditable(false);
-        lblOverdueBooks.setBounds(15, 449, 121, 20);
+        btnBackToSearch.setBounds(200, 448, 201, 29);
         
-        contentPane.add(lblOverdueBooks);
-        scrollPane_1.setBounds(15, 486, 586, 197);
+        contentPane.add(btnBackToSearch);
         
-        contentPane.add(scrollPane_1);
-        table_1.setModel(new DefaultTableModel(
-            new Object[][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-            },
-            new String[] {
-                "Serial", "Title", "Issued Date", "Return Date", "Fines"
+        btnBackToSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                btnBackToSearchPerformed(e);
             }
-        ));
-        table_1.getColumnModel().getColumn(0).setPreferredWidth(50);
-        table_1.getColumnModel().getColumn(1).setPreferredWidth(150);
-        table_1.getColumnModel().getColumn(2).setPreferredWidth(94);
-        table_1.getColumnModel().getColumn(3).setPreferredWidth(95);
-        table_1.getColumnModel().getColumn(4).setPreferredWidth(79);
-        
-        scrollPane_1.setViewportView(table_1);
-        
-        contentPane.add(textField_3);
-        menuBar.setBounds(477, 0, 139, 31);
-        
-        contentPane.add(menuBar);
-        mntmGo.setBounds(439, 0, 177, 31);
-        
-        contentPane.add(mntmGo);
-        mnNewMenu.setBounds(469, 0, 147, 31);
-        
-        contentPane.add(mnNewMenu);
+
+            private void btnBackToSearchPerformed(ActionEvent e) {
+                dispose();
+                SearchHomePage.main(new String[] {user});
+                
+            }
+        });
 
         try (Connection conn = LibraryConnection.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username = ?");

@@ -53,6 +53,7 @@ public class LibrarianHomePage extends JFrame {
     private final JTextField textField_2 = new JTextField();
     private final JLabel lblAllLibraryAccounts = new JLabel("All Student Accounts:");
     private static String user;
+    private final JButton btnNewButton = new JButton("Back to Search Page");
 
     /**
      * Launch the application.
@@ -84,13 +85,17 @@ public class LibrarianHomePage extends JFrame {
         textField.setEditable(false);
         textField.setBounds(106, 76, 195, 26);
         textField.setColumns(10);
+        initGUI();
         
         DefaultTableModel model;
         model = (DefaultTableModel) table.getModel();
-        int id = 0;
+        while (model.getRowCount() > 0) {
+            model.removeRow(model.getRowCount()-1);
+        }
         try(Connection conn = LibraryConnection.getConnection()) {
             
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE position = student", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE position = ?", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ps.setString(1, "student");
             ResultSet rs = ps.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
             int column = rsmd.getColumnCount();          
@@ -108,11 +113,11 @@ public class LibrarianHomePage extends JFrame {
             System.out.println(ex);
         }
         
-        initGUI();
+        
     }
     private void initGUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 613, 724);
+        setBounds(100, 100, 613, 599);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -130,10 +135,20 @@ public class LibrarianHomePage extends JFrame {
         lblPassword.setBounds(15, 183, 104, 20);
         
         contentPane.add(lblPassword);
-        btnAddBookRequest.setBounds(183, 482, 207, 29);
+        btnAddBookRequest.setBounds(58, 482, 207, 29);
         
         contentPane.add(btnAddBookRequest);
         scrollPane.setBounds(15, 270, 561, 196);
+        
+        btnAddBookRequest.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                btnAddBookRequestPerformed(e);
+            }
+
+            private void btnAddBookRequestPerformed(ActionEvent e) {
+                CreateBookPage.main(new String[] {user});
+            }
+        });
         
         contentPane.add(scrollPane);
         scrollPane.setViewportView(table);
@@ -186,7 +201,20 @@ public class LibrarianHomePage extends JFrame {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+        btnNewButton.setBounds(319, 482, 184, 29);
         
         
+        
+        contentPane.add(btnNewButton);
+        btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                btnNewButtonPerformed(e);
+            }
+
+            private void btnNewButtonPerformed(ActionEvent e) {
+                SearchHomePage.main(new String[] {user});
+                dispose();
+            }
+        });
     }
 }

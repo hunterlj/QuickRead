@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
@@ -34,6 +36,7 @@ public class AdminHomePage extends JFrame {
     private final JTable table = new JTable();
     private final JScrollPane scrollPane = new JScrollPane();
     public static String user;
+    private final JButton btnBackToSearch = new JButton("Back to Search Page");
 
     /**
      * Launch the application.
@@ -69,6 +72,9 @@ public class AdminHomePage extends JFrame {
         
         DefaultTableModel model;
         model = (DefaultTableModel) table.getModel();
+        while (model.getRowCount() > 0) {
+            model.removeRow(model.getRowCount()-1);
+        }
         try(Connection conn = LibraryConnection.getConnection()) {   
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM requests", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = ps.executeQuery();
@@ -92,7 +98,7 @@ public class AdminHomePage extends JFrame {
     }
     private void initGUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 651, 696);
+        setBounds(100, 100, 651, 492);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -119,25 +125,27 @@ public class AdminHomePage extends JFrame {
         contentPane.add(textField_1);
         
         contentPane.add(textField_2);
-        scrollPane.setBounds(15, 270, 599, 118);
+        scrollPane.setBounds(0, 270, 629, 118);
         
         contentPane.add(scrollPane);
         scrollPane.setViewportView(table);
         table.setModel(new DefaultTableModel(
             new Object[][] {
-                {null, null, null},
-                {null, "", null},
-                {null, null, ""},
-                {null, null, null},
-                {null, null, null},
+                {null, null, null, null, null},
+                {null, "", null, null, null},
+                {null, null, "", null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, ""},
             },
             new String[] {
-                "Request No.", "Book", "Status"
+                "No.", "Title", "Author", "Subject", "Description"
             }
         ));
-        table.getColumnModel().getColumn(0).setPreferredWidth(130);
-        table.getColumnModel().getColumn(1).setPreferredWidth(596);
-        table.getColumnModel().getColumn(2).setPreferredWidth(78);
+        table.getColumnModel().getColumn(0).setPreferredWidth(50);
+        table.getColumnModel().getColumn(1).setPreferredWidth(148);
+        table.getColumnModel().getColumn(2).setPreferredWidth(129);
+        table.getColumnModel().getColumn(3).setPreferredWidth(116);
+        table.getColumnModel().getColumn(4).setPreferredWidth(402);
         
         try (Connection conn = LibraryConnection.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE username = ?");
@@ -160,7 +168,19 @@ public class AdminHomePage extends JFrame {
         }
         
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        btnBackToSearch.setBounds(219, 407, 175, 29);
         
+        contentPane.add(btnBackToSearch);
+        btnBackToSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                btnBackToSearchPerformed(e);
+            }
+
+            private void btnBackToSearchPerformed(ActionEvent e) {
+                SearchHomePage.main(new String[] {user});
+                dispose();
+            }
+        });
         
         table.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -192,8 +212,8 @@ public class AdminHomePage extends JFrame {
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
-                Book.addBook(title, author, subject, description);
-              //  IssueBookPage.main(new String[] {selected, id});                                
+                HandleRequestPage.main(new String[] {title, author, subject, description});
+                               
             }
         });
     }

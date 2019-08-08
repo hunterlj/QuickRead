@@ -10,16 +10,15 @@ import java.sql.ResultSet;
  */
 public class Book {
     
-    public static boolean addBook(String title, String author, String subject, String description) {
-        boolean status = false;
+    public static int addBook(String title, String author, String subject, String description) {
+        int status = 0;
         try (Connection con = LibraryConnection.getConnection()) {
             PreparedStatement ps = con.prepareStatement("insert into books (title, author, subject, description) values(?, ?, ?, ?)"); 
             ps.setString(1, title);
             ps.setString(2, author);
             ps.setString(3, subject);
             ps.setString(4, description);
-            ResultSet rs = ps.executeQuery();
-            status = rs.next();
+            status = ps.executeUpdate();
             con.close();
         } catch(Exception e) {
             System.out.println(e);
@@ -43,18 +42,19 @@ public class Book {
         return status;
     }
     
-    public static boolean denyRequest(String title) {
-        boolean status = false;
+    public static int denyRequest(String title) {
+        int status = 0;
         try (Connection con = LibraryConnection.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("delete requests where title = ?"); 
+            PreparedStatement ps = con.prepareStatement("delete from requests where title = ?"); 
             ps.setString(1, title);
-            ResultSet rs = ps.executeQuery();
-            status = rs.next();
+            status = ps.executeUpdate();
             con.close();
         } catch(Exception e) {
             System.out.println(e);
         } 
         return status;
     }
+    
+    
     
 }

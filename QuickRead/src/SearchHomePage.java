@@ -61,7 +61,6 @@ public class SearchHomePage extends JFrame {
     private final JLabel lblQuickread = new JLabel("QuickRead Library System");
     private final JButton btnSignIn = new JButton("Sign In");
     private final JButton btnSignUp = new JButton("Sign Up");
-    private final JRadioButton rdbtnSubject = new JRadioButton("Subject");
     private final JTextField textField = new JTextField();
     private final JButton btnFind = new JButton("Find");
     private final JLayeredPane layeredPane = new JLayeredPane();
@@ -96,7 +95,6 @@ public class SearchHomePage extends JFrame {
      */
     public SearchHomePage() throws SQLException {
         buttonGroup.add(rdbtnBookTitle);
-        buttonGroup.add(rdbtnSubject);
         textField.setBounds(645, 27, 232, 26);
         textField.setColumns(10);
         lblQuickread.setBounds(213, 9, 291, 58);
@@ -107,6 +105,9 @@ public class SearchHomePage extends JFrame {
         
         DefaultTableModel model;
         model = (DefaultTableModel) table.getModel();
+        while (model.getRowCount() > 0) {
+            model.removeRow(model.getRowCount()-1);
+        }
         try (Connection conn = LibraryConnection.getConnection()){
             PreparedStatement ps = conn.prepareStatement("select * from books", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = ps.executeQuery();
@@ -147,8 +148,6 @@ public class SearchHomePage extends JFrame {
         contentPane.add(rdbtnBookTitle);
         rdbtnBookAuthor.setBounds(710, 67, 81, 29);
         contentPane.add(rdbtnBookAuthor);
-        rdbtnSubject.setBounds(792, 67, 85, 29);
-        contentPane.add(rdbtnSubject);
         contentPane.add(textField);
 
         btnAccount.setBounds(0, 5, 129, 29);
@@ -162,11 +161,14 @@ public class SearchHomePage extends JFrame {
                     JOptionPane.showMessageDialog(SearchHomePage.this, "Please Sign In or Create Account","Error Accessing Account!", JOptionPane.ERROR_MESSAGE);
                 }
                 String position = ConfirmUser.getPosition(user);
-                if (position.equals("student")) {                   
+                if (position.equals("student")) {   
+                    dispose();
                     StudentHome.main(new String[] {user});
                 } else if (position.equals("librarian")) {
+                    dispose();
                     LibrarianHomePage.main(new String[] {user});
                 } else if (position.equals("admin")) {
+                    dispose();
                     AdminHomePage.main(new String[] {user});
                 }
             }
@@ -280,9 +282,9 @@ public class SearchHomePage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 btnSignUpActionPerformed(e);
             }
-            private void btnSignUpActionPerformed(ActionEvent e) {
+            private void btnSignUpActionPerformed(ActionEvent e) {    
                 dispose();
-                CreateAccountPage.main(new String[] {});
+                CreateAccountPage.main(new String[] {});             
             }
         });
         
@@ -291,26 +293,26 @@ public class SearchHomePage extends JFrame {
         contentPane.add(scrollPane);
         table.setModel(new DefaultTableModel(
             new Object[][] {
-                {null, null, null, null, null, null},
-                {null, null, null, "", null, null},
-                {null, null, null, null, null, null},
-                {null, "", null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, "", null},
+                {null, null, null, null, null},
+                {null, "", null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
             },
             new String[] {
-                "Serial", "Title", "Author", "Subject", "Description", "Status"
+                "Serial", "Title", "Author", "Subject", "Description"
             }
         ));
         table.getColumnModel().getColumn(0).setPreferredWidth(35);
         table.getColumnModel().getColumn(1).setPreferredWidth(135);
         table.getColumnModel().getColumn(2).setPreferredWidth(100);
         table.getColumnModel().getColumn(3).setPreferredWidth(80);
-        table.getColumnModel().getColumn(4).setPreferredWidth(300);
+        table.getColumnModel().getColumn(4).setPreferredWidth(553);
         scrollPane.setViewportView(table);
 
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -321,27 +323,31 @@ public class SearchHomePage extends JFrame {
                 pointPressed(e);
             }
             private void pointPressed(MouseEvent e) {
-                Point point = e.getPoint();
-                int currentRow = table.rowAtPoint(point);
-                int currentColumn = 0;
-                table.setRowSelectionInterval(currentRow, currentRow);
-                table.setColumnSelectionInterval(0,1);
+                if (user == null) {
+                    JOptionPane.showMessageDialog(SearchHomePage.this, "Please Sign In or Create Account.","Error Accessing Book!", JOptionPane.ERROR_MESSAGE);
 
-                String selected = (String) table.getValueAt(currentRow, currentColumn);
+                } else {
+                    Point point = e.getPoint();
+                    int currentRow = table.rowAtPoint(point);
+                    int currentColumn = 0;
+                    table.setRowSelectionInterval(currentRow, currentRow);
+                    table.setColumnSelectionInterval(0,1);
 
-                String id = null;
-                try(Connection conn = LibraryConnection.getConnection()) {
-                    PreparedStatement ps1 = conn.prepareStatement("SELECT id FROM users WHERE username = ?");
-                    ps1.setString(1, user);
-                    ResultSet rs1 = ps1.executeQuery();
-                    while(rs1.next()) {
-                        id = rs1.getString(1);
+                    String selected = (String) table.getValueAt(currentRow, currentColumn);
+
+                    String id = null;
+                    try(Connection conn = LibraryConnection.getConnection()) {
+                        PreparedStatement ps1 = conn.prepareStatement("SELECT id FROM users WHERE username = ?");
+                        ps1.setString(1, user);
+                        ResultSet rs1 = ps1.executeQuery();
+                        while(rs1.next()) {
+                            id = rs1.getString(1);
+                        }
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
                     }
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
+                    IssueBookPage.main(new String[] {selected, id});
                 }
-                
-                IssueBookPage.main(new String[] {selected, id});                                
             }
         });
     }

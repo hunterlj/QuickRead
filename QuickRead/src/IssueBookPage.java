@@ -177,6 +177,7 @@ public class IssueBookPage extends JFrame {
                     JOptionPane.showMessageDialog(IssueBookPage.this, "Sorry, this book is currently unavailable.");
                     
                 }
+                dispose();
                 
             }
         });
